@@ -39,3 +39,13 @@ make
 
 4. Upload the `ctf.uf2` that was created in your build directory.
 
+
+---
+If you're using linux and you want to mount the pico easily, try these commands out:
+`sudo mkdir /mnt/pico`
+`sudo mount (sudo fdisk -l | grep 'W95 FAT16' | awk '{print $1}') /mnt/pico`
+`sudo cp ctf.uf2 /mnt/pico`
+---
+
+Then you can serial into the device. 
+

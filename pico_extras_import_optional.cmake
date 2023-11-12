@@ -57,4 +57,3 @@ if (PICO_EXTRAS_PATH)
     set(PICO_EXTRAS_PATH ${PICO_EXTRAS_PATH} CACHE PATH "Path to the PICO EXTRAS" FORCE)
     add_subdirectory(${PICO_EXTRAS_PATH} pico_extras)
 endif()
-

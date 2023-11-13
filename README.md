@@ -5,6 +5,9 @@ Began building this in November 2023.
 
 Very unsure how it'll turn out! Let me know what you think on [matrix](https://matrix.to/#/@caret:m.sif.moe)!
 
+# Linux Usage:
+`# minicom -b 115200 -D /dev/ttyACM0`
+
 ---
 
 ## Development Setup

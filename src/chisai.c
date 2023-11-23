@@ -1,3 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "pico/stdlib.h"
+#include "hardware/adc.h"
+#include "hardware/gpio.h"
+#include "hardware/sync.h"
+#include "hardware/structs/ioqspi.h"
+#include "hardware/structs/sio.h"
+
 // For memcpy
 #include <string.h>
 

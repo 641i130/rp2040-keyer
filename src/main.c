@@ -4,11 +4,7 @@
 #include "hardware/adc.h"
 #include "hardware/gpio.h"
 
-// helper main
-#include "main.h"
-
-// IDEAS:
-// - Have the player decompile the u2f file and find out what button must be pressed at boot to start something
+#include "chisai.h"
 
 int main() {
     stdio_init_all(); // Setup serial over USB

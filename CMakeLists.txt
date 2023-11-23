@@ -15,7 +15,7 @@ endif()
 pico_sdk_init()
 
 if (TARGET tinyusb_device)
-    add_executable(ctf src/main.c)
+    add_executable(ctf src/main.c src/chisai.c)
 
     # pull in common dependencies
     target_link_libraries(ctf pico_stdlib hardware_adc)

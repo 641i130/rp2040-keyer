@@ -101,14 +101,13 @@ void rsleep(uint32_t min_ms, uint32_t max_ms) {
 void space() {
     char buf[64]; // Assuming the buffer size is 64
     uint16_t len = sizeof(buf);
-
     for (int j = 0; j < 200; ++j) { // Adjust the number of iterations as needed
         for (int i = 0; i < 69; ++i) { // Adjust the number of iterations as needed
             get_random_data(buf, len);
             char character_to_print = (buf[0] % 4 == 0) ? '*' : ' ';
             printf("%c", character_to_print);
         }
-        printf("\n");
+        printf(" "); // TODO if putty doesn't wrap, we will need to make sure it does
         sleep_ms(10); // 100,000 microseconds = 100 milliseconds
     }
 }
@@ -121,31 +120,65 @@ void intro() {
     rsleep(10, 200);
     printf("Err:   serial\n");
     rsleep(10, 200);
-    printf("Die ID #2a8800010000000001433a3a0800e01b\n");
+    printf("Die ID UNKOWN\n");
     rsleep(10, 300);
     printf("4-bit x-loader detected, on-die ecc enabled\n");
     rsleep(10, 300);
-    printf("g_bootData1.bootableconfig 0x0000008f, lastbootableconfig 0x00000080 ...\n");
+    printf("g_bootData0.bootableconfig 0x0000008f, lastbootableconfig 0x00000080 ...\n");
     rsleep(10, 500);
-    printf("g_bootData2.bootableconfig 0x0000008f, lastbootableconfig 0x00000080 ...\n");
-    rsleep(10, 700);
     printf("eccflags 0x00000000 ecc_status 0x55555555\n");
-    rsleep(10, 200);
-    printf("Current rootmtd: /dev/mtdblock11\n");
-    rsleep(10, 200);
-    printf("Current kerneladdr: 0x700000\n");
     rsleep(10, 200);
     printf("\n");
     rsleep(10, 300);
     printf("@@@@@@@@@@@@ starting RP2040 pi-boot 2  @@@@@@@@@@@@@\n");
     rsleep(10, 100);
-    printf("Press BOOTSEL button to interrupt bootcycle.\n");
+    printf("Press BOOTSEL button to interrupt bootcycle and enter \0MODE.\n");
     printf(". ");
     sleep_ms(100);
     printf(". ");
-    sleep_ms(100);
+    sleep_ms(200);
     printf(". ");
-    sleep_ms(100);
+    sleep_ms(300);
     printf("\n");
+}
+
+bool __no_inline_not_in_flash_func(get_bootsel_button)() {
+    // This example blinks the Pico LED when the BOOTSEL button is pressed.
+    //
+    // Picoboard has a button attached to the flash CS pin, which the bootrom
+    // checks, and jumps straight to the USB bootcode if the button is pressed
+    // (pulling flash CS low). We can check this pin in by jumping to some code in
+    // SRAM (so that the XIP interface is not required), floating the flash CS
+    // pin, and observing whether it is pulled low.
+    //
+    // This doesn't work if others are trying to access flash at the same time,
+    // e.g. XIP streamer, or the other core.
+    const uint CS_PIN_INDEX = 1;
+
+    // Must disable interrupts, as interrupt handlers may be in flash, and we
+    // are about to temporarily disable flash access!
+    uint32_t flags = save_and_disable_interrupts();
+
+    // Set chip select to Hi-Z
+    hw_write_masked(&ioqspi_hw->io[CS_PIN_INDEX].ctrl,
+                    GPIO_OVERRIDE_LOW << IO_QSPI_GPIO_QSPI_SS_CTRL_OEOVER_LSB,
+                    IO_QSPI_GPIO_QSPI_SS_CTRL_OEOVER_BITS);
+
+    // Note we can't call into any sleep functions in flash right now
+    for (volatile int i = 0; i < 1000; ++i);
+
+    // The HI GPIO registers in SIO can observe and control the 6 QSPI pins.
+    // Note the button pulls the pin *low* when pressed.
+    bool button_state = !(sio_hw->gpio_hi_in & (1u << CS_PIN_INDEX));
+
+    // Need to restore the state of chip select, else we are going to have a
+    // bad time when we return to code in flash!
+    hw_write_masked(&ioqspi_hw->io[CS_PIN_INDEX].ctrl,
+                    GPIO_OVERRIDE_NORMAL << IO_QSPI_GPIO_QSPI_SS_CTRL_OEOVER_LSB,
+                    IO_QSPI_GPIO_QSPI_SS_CTRL_OEOVER_BITS);
+
+    restore_interrupts(flags);
+
+    return button_state;
 }
 

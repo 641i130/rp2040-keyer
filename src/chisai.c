@@ -101,13 +101,13 @@ void rsleep(uint32_t min_ms, uint32_t max_ms) {
 void space() {
     char buf[64]; // Assuming the buffer size is 64
     uint16_t len = sizeof(buf);
-    for (int j = 0; j < 200; ++j) { // Adjust the number of iterations as needed
+    for (int j = 0; j < 100; ++j) { // Adjust the number of iterations as needed
         for (int i = 0; i < 69; ++i) { // Adjust the number of iterations as needed
             get_random_data(buf, len);
             char character_to_print = (buf[0] % 4 == 0) ? '*' : ' ';
             printf("%c", character_to_print);
         }
-        printf(" "); // TODO if putty doesn't wrap, we will need to make sure it does
+        printf("\n"); // TODO if putty doesn't wrap, we will need to make sure it does
         sleep_ms(10); // 100,000 microseconds = 100 milliseconds
     }
 }
@@ -132,14 +132,7 @@ void intro() {
     rsleep(10, 300);
     printf("@@@@@@@@@@@@ starting RP2040 pi-boot 2  @@@@@@@@@@@@@\n");
     rsleep(10, 100);
-    printf("Press BOOTSEL button to interrupt bootcycle and enter \0MODE.\n");
-    printf(". ");
-    sleep_ms(100);
-    printf(". ");
-    sleep_ms(200);
-    printf(". ");
-    sleep_ms(300);
-    printf("\n");
+    printf("Press BOOTSEL button to interrupt bootcycle:\n");
 }
 
 bool __no_inline_not_in_flash_func(get_bootsel_button)() {
@@ -182,3 +175,19 @@ bool __no_inline_not_in_flash_func(get_bootsel_button)() {
     return button_state;
 }
 
+bool checkButt() {
+    // Check if butt pressed within a small timeframe
+    bool out = false; // if the button is pressed, we will eventually return true
+    for (int i = 0;i < 300; ++i) { // 3 sec check
+        gpio_put(PICO_DEFAULT_LED_PIN, get_bootsel_button() ^ PICO_DEFAULT_LED_PIN_INVERTED);
+        if (get_bootsel_button() > 0) {
+            out = true;
+        }
+        if (i % 100 == 0) {
+            printf(". ");
+        }
+        sleep_ms(10);
+    }
+    printf("\n");
+    return out;
+}

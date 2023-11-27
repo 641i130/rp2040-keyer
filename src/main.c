@@ -8,7 +8,6 @@
 
 int main() {
     stdio_init_all(); // Setup serial over USB
-    printf("DaemonCTF{lift_off}");
     // Set up bootsel button to flash
     gpio_init(PICO_DEFAULT_LED_PIN);
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);

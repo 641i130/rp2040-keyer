@@ -22,7 +22,12 @@ int main() {
     bool mode = checkButt(); // See if user presses the boot sel button
     // depending on the outcome of if they pressed the button down
     if (!mode) {
-        printf("Skipping...\n");
+        printf("Skipping ");
+        for (int lmao = 0;lmao < 3;lmao++) {
+            printf(". ");
+            sleep_ms(200);
+        }
+        printf("\n");
         while (true) {
             challenges();
             char *u = getInputString();

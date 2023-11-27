@@ -101,7 +101,7 @@ void rsleep(uint32_t min_ms, uint32_t max_ms) {
 void space() {
     char buf[64]; // Assuming the buffer size is 64
     uint16_t len = sizeof(buf);
-    printf("\n\n~\nDaemonCTF{lift_off}\n~\n\n");
+    printf("\n\n🚀\nDaemonCTF{lift_off}\n🚀\n\n");
     for (int j = 0; j < 100; ++j) { // Adjust the number of iterations as needed
         for (int i = 0; i < 69; ++i) { // Adjust the number of iterations as needed
             get_random_data(buf, len);

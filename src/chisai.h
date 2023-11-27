@@ -13,3 +13,7 @@ void space();
 void intro();
 bool __no_inline_not_in_flash_func(get_bootsel_button)();
 bool checkButt();
+void challenges();
+void aes();
+void ch0();
+void ch1();

@@ -191,3 +191,16 @@ bool checkButt() {
     printf("\n");
     return out;
 }
+
+void challenges() {
+    printf("Challenges\n");
+}
+void aes() {
+    printf("AES\n");
+}
+void ch0() {
+    printf("ch0\n");
+}
+void ch1() {
+    printf("ch1\n");
+}

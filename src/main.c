@@ -21,29 +21,33 @@ int main() {
     intro(); // Run text intro
     bool mode = checkButt(); // See if user presses the boot sel button
     // depending on the outcome of if they pressed the button down
-    if (mode) {
-        printf("WOW");
+    if (!mode) {
+        printf("Skipping...\n");
+        while (true) {
+            challenges();
+            char *u = getInputString();
+            printf("\nEntered string: %s\n", u);
+            switch (u[0]) {
+                case '0':
+                    // challenge 0
+                    ch0();
+                    break;
+                case '1':
+                    // challenge 1
+                    ch1();
+                    break;
+                default:
+                    break;
+            }
+            free(u);
+        }
     } else {
         printf("OK");
+        aes();
+        while (true) {
+            sleep_ms(1000);
+            blink(10);
+        }
     }
-    // put them in a weird mode
-    
-    // not normal ctf mode
-    
-    // NULL mode is what its called cause its \0 lol
-
-    // if they dont switch it into flashy light mode for future problems
-    char *userInput = getInputString();
-    // You can now use the userInput string as needed
-    printf("\nEntered string: %s\n", userInput);
-    // Don't forget to free the allocated memory
-    free(userInput);
-    
-    // INPUT LOOP
-    // Cycle through the problems, given the user requesting X question to solve
-
-    while (true) {
-        sleep_ms(1000);
-        blink(10);
-    }
+    return 0;
 }

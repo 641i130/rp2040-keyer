@@ -42,14 +42,16 @@ int main() {
                     // challenge 1
                     ch1();
                     break;
-                default:
+                default: 
+                    // Typo
+                    huh();
                     break;
             }
             free(u);
         }
     } else {
         printf("OK");
-        aes();
+        aes(); // or morse code functions
         while (true) {
             sleep_ms(1000);
             blink(10);

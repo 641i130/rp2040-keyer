@@ -7,6 +7,7 @@
 #include "chisai.h"
 
 int main() {
+    printf("DaemonCTF{hidden_af}\n");
     stdio_init_all(); // Setup serial over USB
     // Set up bootsel button to flash
     gpio_init(PICO_DEFAULT_LED_PIN);

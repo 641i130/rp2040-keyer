@@ -79,6 +79,21 @@ char* getInputString() {
     return inputString;
 }
 
+void rarray(char *strings[], uint32_t num_strings) {
+    char buf[64];
+    uint16_t len = sizeof(buf);
+    // Get random data
+    get_random_data(buf, len);
+    // Calculate a random number to be used in the num_strings array
+    uint64_t sum = 0;
+    for (int i = 0; i < len; i++) {
+        sum += buf[i];
+    }
+    // Normalize the sum to be in the range [min_ms, max_ms]
+    uint32_t index = (sum % (num_strings + 1));
+    // Print the selected random string
+    printf("%s\n",strings[index]);
+}
 
 void rsleep(uint32_t min_ms, uint32_t max_ms) {
     char buf[64]; // Assuming the buffer size is 64
@@ -230,12 +245,21 @@ bool checkButt() {
 void challenges() {
     printf("Challenges\n");
 }
+
 void aes() {
     printf("AES\n");
 }
+
 void ch0() {
     printf("ch0\n");
 }
+
 void ch1() {
     printf("ch1\n");
+}
+
+void huh() {
+    char *strings[] = {"[?] ???", "[?] No, thats not an option...", "[?] wtf are you typing!?!?", "[?] do you have working fingers?!", "[?] can you read at all!?!?!"};
+    uint32_t num_strings = sizeof(strings) / sizeof(strings[0]);
+    rarray(strings, num_strings);
 }

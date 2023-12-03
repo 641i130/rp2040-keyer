@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.12)
 include(pico_sdk_import.cmake)
 include(pico_extras_import_optional.cmake)
 
-project(rp2040-ctf C CXX ASM)
+project(rp2040-keyer C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -15,20 +15,20 @@ endif()
 pico_sdk_init()
 
 if (TARGET tinyusb_device)
-    add_executable(ctf src/main.c src/chisai.c)
+    add_executable(keyer src/main.c)
 
     # pull in common dependencies
-    target_link_libraries(ctf pico_stdlib hardware_adc)
+    target_link_libraries(keyer pico_stdlib hardware_adc)
 
     # enable usb output, disable uart output
-    pico_enable_stdio_usb(ctf 1)
-    pico_enable_stdio_uart(ctf 0)
+    pico_enable_stdio_usb(keyer 1)
+    pico_enable_stdio_uart(keyer 0)
 
     # create map/bin/hex/uf2 file etc.
-    pico_add_extra_outputs(ctf)
+    pico_add_extra_outputs(keyer)
 
 elseif(PICO_ON_DEVICE)
-    message(WARNING "not building ctf because TinyUSB submodule is not initialized in the SDK")
+    message(WARNING "not building rp2040-keyer because TinyUSB submodule is not initialized in the SDK")
 endif()
 add_compile_options(-Wall
         -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int

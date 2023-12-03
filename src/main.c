@@ -1,61 +1,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "pico/stdlib.h"
-#include "hardware/adc.h"
 #include "hardware/gpio.h"
-// Mine
-#include "chisai.h"
 
-int main() {
-    printf("DaemonCTF{hidden_af}\n");
-    stdio_init_all(); // Setup serial over USB
-    // Set up bootsel button to flash
+void init_led() {
+    #ifndef PICO_DEFAULT_LED_PIN
+    #warning Blink requires a board with the default LED
+    #else
     gpio_init(PICO_DEFAULT_LED_PIN);
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
-    // boot sel setup ^ 
-    adc_init();
-    adc_gpio_init(RPIN);
-    adc_select_input(ADCCH);
-    init_led();
-    sleep_ms(3000);
-    space();
-    intro(); // Run text intro
-    bool mode = checkButt(); // See if user presses the boot sel button
-    // depending on the outcome of if they pressed the button down
-    if (!mode) {
-        printf("Skipping ");
-        for (int lmao = 0;lmao < 3;lmao++) {
-            printf(". ");
-            sleep_ms(200);
-        }
-        printf("\n");
-        while (true) {
-            challenges();
-            char *u = getInputString();
-            printf("\nEntered string: %s\n", u);
-            switch (u[0]) {
-                case '0':
-                    // challenge 0
-                    ch0();
-                    break;
-                case '1':
-                    // challenge 1
-                    ch1();
-                    break;
-                default: 
-                    // Typo
-                    huh();
-                    break;
-            }
-            free(u);
-        }
-    } else {
-        printf("OK");
-        aes(); // or morse code functions
-        while (true) {
-            sleep_ms(1000);
-            blink(10);
-        }
-    }
-    return 0;
+    #endif
 }
+
+int main() {
+    stdio_init_all(); // Setup serial over USB
+    gpio_init(PICO_DEFAULT_LED_PIN);
+    gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
+    init_led();
+    printf("\n\n\nStarting...\n");
+
+    gpio_init(4);
+    gpio_set_dir(4, GPIO_IN);
+    gpio_init(7);
+    gpio_set_dir(7, GPIO_IN);
+
+    // Input loop
+    while (true) {
+        bool button1_state = gpio_get(4);
+        bool button2_state = gpio_get(7);
+
+        if (button1_state && button2_state) {
+            printf("Both buttons pressed\n");
+        } else if (button1_state) {
+            printf("Button on 4 pressed\n");
+        } else if (button2_state) {
+            printf("Button on 7 pressed\n");
+        }
+
+        // Add a delay to avoid printing too quickly
+        sleep_ms(100);
+        printf("uwu\n");
+    }
+}
+

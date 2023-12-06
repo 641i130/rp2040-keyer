@@ -26,20 +26,15 @@ int main() {
 
     // Input loop
     while (true) {
-        bool button1_state = gpio_get(4);
-        bool button2_state = gpio_get(7);
-
+        bool button1_state = gpio_get(4); // left is . dit
+        bool button2_state = gpio_get(7); // right is - dah
         if (button1_state && button2_state) {
-            printf("Both buttons pressed\n");
+            printf("11\n");
         } else if (button1_state) {
-            printf("Button on 4 pressed\n");
+            printf("01\n");
         } else if (button2_state) {
-            printf("Button on 7 pressed\n");
+            printf("10\n");
         }
-
-        // Add a delay to avoid printing too quickly
-        sleep_ms(100);
-        printf("uwu\n");
     }
 }
 
